@@ -3,6 +3,14 @@ import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
+
+function formatTime(a: number) {
+  if (a < 10) {
+    return "0" + a
+  }
+  return a
+}
+
 export default function TimerScreen() {
   const { title } = useLocalSearchParams();
 
@@ -15,14 +23,15 @@ export default function TimerScreen() {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
 
+  // Adapted from: https://dev.to/yuridevat/how-to-create-a-timer-with-react-7b9
   const getTime = () => {
-    const time = Date.now();
+    const time = new Date();
 
     // console.log(time)
 
-    setHours(Math.floor((5 + time / (1000 * 60 * 60)) % 24));
-    setMinutes(Math.floor((time / 1000 / 60) % 60));
-    setSeconds(Math.floor((time / 1000) % 60));
+    setHours(time.getHours());
+    setMinutes(time.getMinutes());
+    setSeconds(time.getSeconds());
   }
 
   useEffect(() => {
@@ -50,7 +59,7 @@ export default function TimerScreen() {
 
 
         <Text style={styles.title}>{title}</Text>
-        <Text style={styles.timer}>{hours}:{minutes}:{seconds}</Text>
+        <Text style={styles.timer}>{formatTime(hours)}:{formatTime(minutes)}:{formatTime(seconds)}</Text>
         <Text style={styles.goal}>Today's Goal: 2:00:00 +1.1%</Text>
       </View>
 
