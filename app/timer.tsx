@@ -24,18 +24,19 @@ export default function TimerScreen() {
   const [seconds, setSeconds] = useState(0);
 
   // Adapted from: https://dev.to/yuridevat/how-to-create-a-timer-with-react-7b9
-  const getTime = () => {
-    const time = new Date();
+  const getTime = (initTime: number) => {
+    const curTime: Date = new Date();
+    const diff: number = curTime.getTime() - initTime;
+    
 
-    // console.log(time)
-
-    setHours(time.getHours());
-    setMinutes(time.getMinutes());
-    setSeconds(time.getSeconds());
+    setHours(Math.trunc(diff / (100 * 60 * 60)) % 24);
+    setMinutes(Math.floor(diff / (1000 * 60)) % 60);
+    setSeconds(Math.trunc(diff / 1000) % 60);
   }
 
   useEffect(() => {
-    const interval = setInterval(() => getTime(), 1000)
+    const firstTime: number = Date.now();
+    const interval = setInterval(() => getTime(firstTime), 100)
 
     return () => clearInterval(interval)
   }, [])
